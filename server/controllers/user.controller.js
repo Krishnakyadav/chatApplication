@@ -33,7 +33,6 @@ export const register = asyncHandler(async (req, res, next) => {
       newUser,
     },
   });
-  res.send("hi Register");
 });
 
 export const login = asyncHandler(async (req, res, next) => {

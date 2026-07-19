@@ -14,7 +14,7 @@ app.use(express.json())  // midleware
 const PORT = process.env.PORT || 5000;
 console.log(PORT);
 
-
+ 
 // routes
 import userRouter from "./routes/user.route.js";
 app.use("/api/v1/user", userRouter);
