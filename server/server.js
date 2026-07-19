@@ -17,8 +17,11 @@ console.log(PORT);
 
 // routes
 import userRouter from "./routes/user.route.js";
-
 app.use("/api/v1/user", userRouter);
+
+// middleware
+import { errorMiddleware } from "./middlewares/error.middleware.js";
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Your server started at Port${PORT}`);
