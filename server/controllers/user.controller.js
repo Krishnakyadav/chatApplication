@@ -102,8 +102,7 @@ export const login = asyncHandler(async (req, res, next) => {
     });
 });
 
-export const getProfile = asyncHandler(async (req, res, next) => {  
-  
+export const getProfile = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
   console.log(userId);
 
@@ -113,4 +112,17 @@ export const getProfile = asyncHandler(async (req, res, next) => {
     success: true,
     responseData: profile,
   });
+});
+
+export const logout = asyncHandler(async (req, res, next) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message:"Logout Successfull"
+    });
 });
