@@ -3,12 +3,14 @@ dotenv.config();
 
 import { connectDB } from "./db/connecioin1.db.js";
 connectDB();
+import cookieParser from "cookie-parser"
 
 import express, { json } from "express";
 
 const app = express();
 
 app.use(express.json())  // midleware
+app.use(cookieParser())
 
 
 const PORT = process.env.PORT || 5000;

@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import { asyncHandler } from "../utilities/asyncHandler.utility.js";
 import { errorHandler } from "../utilities/errorHandler.utlity.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const register = asyncHandler(async (req, res, next) => {
   const { fullName, username, password, gender } = req.body;
@@ -27,12 +28,31 @@ export const register = asyncHandler(async (req, res, next) => {
     avatar,
   });
 
-  res.status(200).json({
-    sucess: true,
-    responseData: {
-      newUser,
-    },
+  const tokenData = {
+    _id: newUser?._id,
+  };
+
+  const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES,
   });
+
+  res
+    .status(200)
+    .cookie("token", token, {
+      expires: new Date(
+        Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
+      ),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+    })
+    .json({
+      success: true,
+      responseData: {
+        newUser,
+        token,
+      },
+    });
 });
 
 export const login = asyncHandler(async (req, res, next) => {
@@ -55,10 +75,42 @@ export const login = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("Please enter a valid username or password"));
   }
 
+  const tokenData = {
+    _id: user?._id,
+  };
+
+  const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES,
+  });
+
+  res
+    .status(200)
+    .cookie("token", token, {
+      expires: new Date(
+        Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
+      ),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+    })
+    .json({
+      sucess: true,
+      responseData: {
+        user,
+        token,
+      },
+    });
+});
+
+export const getProfile = asyncHandler(async (req, res, next) => {  
+  
+  const userId = req.user._id;
+  console.log(userId);
+
+  const profile = await User.findById(userId);
+
   res.status(200).json({
-    sucess: true,
-    responseData: {
-      user,
-    },
+    success: true,
+    responseData: profile,
   });
 });
