@@ -43,7 +43,7 @@ export const register = asyncHandler(async (req, res, next) => {
         Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
       ),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "None",
     })
     .json({
@@ -71,7 +71,10 @@ export const login = asyncHandler(async (req, res, next) => {
   }
 
   const isValidPassword = await bcrypt.compare(password, user.password); // Check password compare password or user.password
-  if (isValidPassword) {
+  //   console.log("Entered Password:", password);
+  // console.log("Stored Password:", user.password);
+  // console.log("isValidPassword:", isValidPassword);
+  if (!isValidPassword) {
     return next(new errorHandler("Please enter a valid username or password"));
   }
 
@@ -90,11 +93,12 @@ export const login = asyncHandler(async (req, res, next) => {
         Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
       ),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "None",
+     
     })
     .json({
-      sucess: true,
+      success: true,
       responseData: {
         user,
         token,
@@ -123,6 +127,15 @@ export const logout = asyncHandler(async (req, res, next) => {
     })
     .json({
       success: true,
-      message:"Logout Successfull"
+      message: "Logout Successfull",
     });
+});
+
+export const getOtherUsers = asyncHandler(async (req, res, next) => {
+  const otherUsers = await User.find({ _id: { $ne: req.user._id } });
+
+  res.status(200).json({
+    success: true,
+    responseData: otherUsers,
+  });
 });

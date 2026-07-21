@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoKeySharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { loginUserThunk } from "../../store/slice/user/user.thunk";
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -16,7 +21,23 @@ const Login = () => {
       [name]: value,
     }));
   };
-  console.log(loginData);
+
+  const handleLogin = async () => {
+    //   console.log("login");
+  
+    //   toast.success("login successfull");
+    //  await dispatch(loginUserThunk(loginData))
+    const response = await dispatch(loginUserThunk(loginData));
+     if (response?.payload?.success) {
+   navigate("/")
+    }
+
+  if (loginUserThunk.fulfilled.match(response)) {
+    toast.success("Login successful");
+  }
+  };
+
+  // console.log(loginData);
   return (
     <div className="flex justify-center items-center p-6 min-h-screen">
       <div className="max-w-[35rem] w-full flex flex-col gap-5 bg-base-200 p-6 rounded-lg">
@@ -46,7 +67,9 @@ const Login = () => {
           />
         </label>
 
-        <button className="btn btn-primary w-full">Login</button>
+        <button onClick={handleLogin} className="btn btn-primary w-full">
+          Login
+        </button>
         <p>
           Don't have an account? &nbsp;{" "}
           <Link to="/signup" className="text-blue-400 underline">

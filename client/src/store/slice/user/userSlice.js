@@ -1,24 +1,50 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUserThunk } from "./user.thunk";
+import { loginUserThunk, registerUserThunk } from "./user.thunk";
 
 const initialState = {
   isAuthenticated: false,
   screenLoading: false,
+  userProfile: null,
+  buttonLoading: false,
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
+  //Login user
   extraReducers: (builder) => {
     builder.addCase(loginUserThunk.pending, (state, action) => {
-      console.log("pending");
+      state.buttonLoading = true;
+      // console.log("pending");
     });
     builder.addCase(loginUserThunk.fulfilled, (state, action) => {
-      console.log("fulfilled");
+      // console.log("fulfilled");
+      console.log(action.payload);
+      state.userProfile = action.payload?.responseData?.user;
+      state.buttonLoading = false;
     });
     builder.addCase(loginUserThunk.rejected, (state, action) => {
-      console.log("rejected");
+      // console.log("rejected");
+      state.buttonLoading = false;
+    });
+  },
+
+  // Register Users
+  extraReducers: (builder) => {
+    builder.addCase(registerUserThunk.pending, (state, action) => {
+      state.buttonLoading = true;
+      // console.log("pending");
+    });
+    builder.addCase(registerUserThunk.fulfilled, (state, action) => {
+      // console.log("fulfilled");
+      console.log(action.payload);
+      state.userProfile = action.payload?.responseData?.user;
+      state.buttonLoading = false;
+    });
+    builder.addCase(registerUserThunk.rejected, (state, action) => {
+      // console.log("rejected");
+      state.buttonLoading = false;
     });
   },
 });
