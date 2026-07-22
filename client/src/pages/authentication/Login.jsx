@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoKeySharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUserThunk } from "../../store/slice/user/user.thunk";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  const { isAuthenticated } = useSelector((state) => state.userReducer);
+
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
+
+  useEffect(()=>{
+    if(isAuthenticated){
+      navigate("/")
+    }
+  },[isAuthenticated])
 
   const handleInputChange = (e) => {
     let { name, value } = e.target;
@@ -24,17 +33,14 @@ const Login = () => {
 
   const handleLogin = async () => {
     //   console.log("login");
-  
-    //   toast.success("login successfull");
-    //  await dispatch(loginUserThunk(loginData))
     const response = await dispatch(loginUserThunk(loginData));
-     if (response?.payload?.success) {
-   navigate("/")
+    if (response?.payload?.success) {
+      navigate("/");
     }
 
-  if (loginUserThunk.fulfilled.match(response)) {
-    toast.success("Login successful");
-  }
+    if (loginUserThunk.fulfilled.match(response)) {
+      toast.success("Login successful");
+    }
   };
 
   // console.log(loginData);

@@ -61,12 +61,12 @@ export const registerUserThunk = createAsyncThunk(
         gender,
       });
 
-      toast.success("Account Created Successfully")
+      toast.success("Account Created Successfully");
       // console.log(response);
 
       return response.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       console.log(error?.response?.data?.errMessage);
       const errorOutput =
         error?.response?.data?.errMessage || "Something went wrong";
@@ -78,30 +78,42 @@ export const registerUserThunk = createAsyncThunk(
   },
 );
 
-
-export const registerUserThunk = createAsyncThunk(
-  "user/signup",
-  async ({ fullName, username, password, gender }, { rejectWithValue }) => {
-    // console.log(fullName,username,password,gender)
+export const logoutUserThunk = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/user/register", {
-        fullName,
-        username,
-        password,
-        gender,
-      });
+      const response = await axiosInstance.post("/user/logout");
 
-      toast.success("Account Created Successfully")
+      toast.success("Logout Successfull");
       // console.log(response);
-
       return response.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       console.log(error?.response?.data?.errMessage);
       const errorOutput =
         error?.response?.data?.errMessage || "Something went wrong";
 
       toast.error(errorOutput);
+
+      return rejectWithValue(errorOutput);
+    }
+  },
+);
+
+export const getUserProfileThunk = createAsyncThunk(
+  "user/get-profile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/user/get-profile");
+      // console.log(response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      console.log(error?.response?.data?.errMessage);
+      const errorOutput =
+        error?.response?.data?.errMessage || "Something went wrong";
+
+      // toast.error(errorOutput);
 
       return rejectWithValue(errorOutput);
     }

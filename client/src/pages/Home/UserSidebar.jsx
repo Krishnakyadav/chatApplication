@@ -1,8 +1,16 @@
 import React from "react";
 import { IoSearch } from "react-icons/io5";
 import User from "./User";
+import { logoutUserThunk } from "../../store/slice/user/user.thunk";
+import { useDispatch } from "react-redux";
 
 const UserSidebar = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = async() => {
+   await dispatch(logoutUserThunk());
+  };
+
   return (
     // chat app
     <div className="max-w-[20em] w-full h-screen  flex flex-col border-r border-r-white/10">
@@ -10,7 +18,7 @@ const UserSidebar = () => {
         Chat App
       </h1>
 
-{/* Search bar */}
+      {/* Search bar */}
       <div className="p-3">
         <label className="input input-bordered flex items-center gap-2">
           <input type="text" className="grow" placeholder="Search" />
@@ -18,13 +26,12 @@ const UserSidebar = () => {
         </label>
       </div>
 
-{/* User */}
+      {/* User */}
       <div className="h-full overflow-y-auto px-3 ">
         <User />
-        <User /> <User /> <User /> <User /> 
-      
+        <User /> <User /> <User /> <User />
       </div>
-      
+
       {/* profile photo / Logout btn */}
       <div className="flex items-center justify-between  p-3">
         <div className="avatar">
@@ -32,7 +39,7 @@ const UserSidebar = () => {
             <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
           </div>
         </div>
-        <button className="btn btn-primary btn-sm px-4">Logout</button>
+        <button onClick={handleLogout} className="btn btn-primary btn-sm px-4">Logout</button>
       </div>
     </div>
   );
