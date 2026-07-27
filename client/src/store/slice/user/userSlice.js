@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  getOtherUsersThunk,
   getUserProfileThunk,
   loginUserThunk,
   logoutUserThunk,
@@ -8,15 +9,21 @@ import {
 
 const initialState = {
   isAuthenticated: false,
-  screenLoading: true,
   userProfile: null,
+  otherUsers: null,
+  selectedUser: null,
+  screenLoading: true,
   buttonLoading: false,
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedUser: (state,action)=>{
+      state.selectedUser=action.payload
+    }
+  },
 
   //LOGIN USER
   extraReducers: (builder) => {
@@ -63,18 +70,38 @@ export const userSlice = createSlice({
 
     //GET USER profile
 
-    builder.addCase(getUserProfileThunk.pending, (state, action) => {});
+    builder.addCase(getUserProfileThunk.pending, (state, action) => {
+      state.screenLoading = true;
+      console.log("pending")
+    });
     builder.addCase(getUserProfileThunk.fulfilled, (state, action) => {
       ((state.isAuthenticated = true), (state.screenLoading = false));
-       console.log(action.payload);
+      console.log("fullfiled")
+      //add using chatgpt
+        state.userProfile = action.payload.responseData.user;
+      console.log(action.payload);
     });
     builder.addCase(getUserProfileThunk.rejected, (state, action) => {
+      state.screenLoading = false;
+        console.log("Rejected");
+    });
+
+    //GET OTHER USERS
+    builder.addCase(getOtherUsersThunk.pending, (state, action) => {
+      state.screenLoading = true;
+    });
+    builder.addCase(getOtherUsersThunk.fulfilled, (state, action) => {
+      state.screenLoading = false;
+      state.otherUsers = action.payload.responseData;
+      // console.log(action.payload);
+    });
+    builder.addCase(getOtherUsersThunk.rejected, (state, action) => {
       state.screenLoading = false;
     });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {} = userSlice.actions;
+export const {  setSelectedUser} = userSlice.actions;
 
 export default userSlice.reducer;

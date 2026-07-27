@@ -1,27 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
-import axiosInstance from "../../../component/utilities/axiosInstance";
-
-// First, create the thunk
-// export const loginUserThunk = createAsyncThunk("users/fetchById", async ({username,password},{rejectWithValue}) => {
-//   try {
-//     const response = await axiosInstance.post("/user/login", {
-//       username,
-//       password,
-//     });
-//     console.log(response);
-//     return response.data
-//   } catch (error) {
-//     console.error(error)
-//     console.log(error?.response?.data?.errMessage);
-//     const errorOutput = error?.response?.data?.errMessage
-//     toast.error(errorOutput)
-//     return rejectWithValue(errorOutput);
-//      console.log("Message:", error.message);
-
-//   return rejectWithValue(error.response?.data || error.message);
-//   }
-// });
+import { axiosInstance } from "../../../component/utilities/axiosInstance";
 
 // second
 export const loginUserThunk = createAsyncThunk(
@@ -105,6 +84,28 @@ export const getUserProfileThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/user/get-profile");
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      console.log(error?.response?.data?.errMessage);
+       console.log("Status:", error.response?.status);
+  console.log("Response:", error.response?.data);
+      const errorOutput =
+        error?.response?.data?.errMessage || "Something went wrong";
+
+      // toast.error(errorOutput);
+
+      return rejectWithValue(errorOutput);
+    }
+  },
+);
+
+export const getOtherUsersThunk = createAsyncThunk(
+  "user/getOtherUsers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/user/get-other-users");
       // console.log(response);
       return response.data;
     } catch (error) {

@@ -46,7 +46,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 export const getMessage = asyncHandler(async (req, res, next) => {
   const myId = req.user._id;
   const otherParticipantId = req.params.otherParticipantId;
-  console.log(myId,otherParticipantId)
+
 
   if (!myId || !otherParticipantId) {
     return next(new errorHandler("All field are required", 400));
@@ -56,6 +56,16 @@ export const getMessage = asyncHandler(async (req, res, next) => {
     participants: { $all: [myId, otherParticipantId] },
   }).populate("messages")
 
+  if (!conversation) {
+  return res.status(200).json({
+    success: true,
+    responseData: {
+      messages: [],
+    },
+  });
+}
+
+    console.log("Conversation:", conversation);
   // socket.io
 
   res.status(200).json({

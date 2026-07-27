@@ -2,13 +2,15 @@ import React from "react";
 import { IoSearch } from "react-icons/io5";
 import User from "./User";
 import { logoutUserThunk } from "../../store/slice/user/user.thunk";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const UserSidebar = () => {
   const dispatch = useDispatch();
+  const { otherUsers } = useSelector((state) => state.userReducer);
 
-  const handleLogout = async() => {
-   await dispatch(logoutUserThunk());
+
+  const handleLogout = async () => {
+    await dispatch(logoutUserThunk());
   };
 
   return (
@@ -27,9 +29,10 @@ const UserSidebar = () => {
       </div>
 
       {/* User */}
-      <div className="h-full overflow-y-auto px-3 ">
-        <User />
-        <User /> <User /> <User /> <User />
+      <div className="h-full overflow-y-auto px-3 flex flex-col gap-1">
+        {otherUsers?.map((userDetails) => {
+          return <User key={userDetails?._id} userDetails={userDetails} />;
+        })}
       </div>
 
       {/* profile photo / Logout btn */}
@@ -39,7 +42,9 @@ const UserSidebar = () => {
             <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
           </div>
         </div>
-        <button onClick={handleLogout} className="btn btn-primary btn-sm px-4">Logout</button>
+        <button onClick={handleLogout} className="btn btn-primary btn-sm px-4">
+          Logout
+        </button>
       </div>
     </div>
   );

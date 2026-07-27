@@ -1,0 +1,46 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { getMessageThunk, sendMessageThunk } from "./message.thunk";
+
+const initialState = {
+  buttonLoading: false,
+  screenLoading: false,
+  messages: null,
+};
+
+export const messageSlice = createSlice({
+  name: "message",
+  initialState,
+  reducers: {},
+
+  //send message
+  extraReducers: (builder) => {
+    builder.addCase(sendMessageThunk.pending, (state, action) => {
+      state.buttonLoading = true;
+    });
+    builder.addCase(sendMessageThunk.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.buttonLoading = false;
+    });
+    builder.addCase(sendMessageThunk.rejected, (state, action) => {
+      state.buttonLoading = false;
+    });
+
+    // get message
+    builder.addCase(getMessageThunk.pending, (state, action) => {
+      state.buttonLoading = true;
+    });
+    builder.addCase(getMessageThunk.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.buttonLoading = false;
+       state.messages = action.payload.responseData.messages;
+    });
+    builder.addCase(getMessageThunk.rejected, (state, action) => {
+      state.buttonLoading = false;
+    });
+  },
+});
+
+// Action creators are generated for each case reducer function
+export const {} = messageSlice.actions;
+
+export default messageSlice.reducer;
