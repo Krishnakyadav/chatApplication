@@ -10,6 +10,8 @@ export const register = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("All field are required", 400));
   }
 
+  console.log(fullName, username, password, gender);
+
   const user = await User.findOne({ username });
   if (user) {
     return next(new errorHandler("User already exists", 400));
@@ -43,9 +45,10 @@ export const register = asyncHandler(async (req, res, next) => {
         Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
       ),
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: false,
+      sameSite: "lax",
     })
+
     .json({
       success: true,
       responseData: {
@@ -93,10 +96,10 @@ export const login = asyncHandler(async (req, res, next) => {
         Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
       ),
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
-     
+      secure: false,
+      sameSite: "lax",
     })
+
     .json({
       success: true,
       responseData: {
