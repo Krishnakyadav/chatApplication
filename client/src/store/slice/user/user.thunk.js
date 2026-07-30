@@ -84,13 +84,12 @@ export const getUserProfileThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/user/get-profile");
-      console.log(response);
       return response.data;
     } catch (error) {
       console.log(error);
       console.log(error?.response?.data?.errMessage);
-       console.log("Status:", error.response?.status);
-  console.log("Response:", error.response?.data);
+      console.log("Status:", error.response?.status);
+      console.log("Response:", error.response?.data);
       const errorOutput =
         error?.response?.data?.errMessage || "Something went wrong";
 

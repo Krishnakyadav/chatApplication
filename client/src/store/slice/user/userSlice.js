@@ -20,9 +20,9 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setSelectedUser: (state,action)=>{
-      state.selectedUser=action.payload
-    }
+    setSelectedUser: (state, action) => {
+      state.selectedUser = action.payload;
+    },
   },
 
   //LOGIN USER
@@ -72,18 +72,16 @@ export const userSlice = createSlice({
 
     builder.addCase(getUserProfileThunk.pending, (state, action) => {
       state.screenLoading = true;
-      console.log("pending")
     });
     builder.addCase(getUserProfileThunk.fulfilled, (state, action) => {
       ((state.isAuthenticated = true), (state.screenLoading = false));
-      console.log("fullfiled")
       //add using chatgpt
-        state.userProfile = action.payload.responseData.user;
+      // state.userProfile = action.payload.responseData.user;
+      state.userProfile= action.payload.responseData;
       console.log(action.payload);
     });
     builder.addCase(getUserProfileThunk.rejected, (state, action) => {
       state.screenLoading = false;
-        console.log("Rejected");
     });
 
     //GET OTHER USERS
@@ -102,6 +100,6 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  setSelectedUser} = userSlice.actions;
+export const { setSelectedUser } = userSlice.actions;
 
 export default userSlice.reducer;
