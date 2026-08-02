@@ -3,8 +3,10 @@ import { useSelector } from "react-redux";
 
 const Message = ({ messageDetails }) => {
   // console.log(messageDetails);
-  const { userProfile } = useSelector((state) => state.userReducer);
-  console.log(userProfile?._id === messageDetails?.senderId);
+  const { userProfile, selectedUser } = useSelector(
+    (state) => state.userReducer,
+  );
+  // console.log(userProfile?._id === messageDetails?.senderId);
   return (
     <>
       <div
@@ -14,7 +16,11 @@ const Message = ({ messageDetails }) => {
           <div className="w-10 rounded-full">
             <img
               alt="Tailwind CSS chat bubble component"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+              src={
+                userProfile?._id === messageDetails?.senderId
+                  ? userProfile?.avatar
+                  : selectedUser?.avatar
+              }
             />
           </div>
         </div>

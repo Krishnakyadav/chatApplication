@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const UserSidebar = () => {
   const dispatch = useDispatch();
-  const { otherUsers } = useSelector((state) => state.userReducer);
-
+  const { otherUsers, userProfile } = useSelector((state) => state.userReducer);
 
   const handleLogout = async () => {
     await dispatch(logoutUserThunk());
@@ -37,10 +36,14 @@ const UserSidebar = () => {
 
       {/* profile photo / Logout btn */}
       <div className="flex items-center justify-between  p-3">
-        <div className="avatar">
-          <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2">
-            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        <div className="flex items-center gap-5">
+          <div className="avatar">
+            <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2">
+              <img src={userProfile?.avatar} />
+            </div>
+         
           </div>
+             <h2>{userProfile?.username}</h2>
         </div>
         <button onClick={handleLogout} className="btn btn-primary btn-sm px-4">
           Logout

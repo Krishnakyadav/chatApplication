@@ -20,7 +20,10 @@ const MessageContainer = () => {
   return (
     <>
       {!selectedUser ? (
-        <>please select a user</>
+        <div className=" w-full flex items-center justify-center flex-col gap-5">
+          <h2>Welcome to Chat App</h2>
+          <p className="text-xl">Please select a Person to Continue your chat!!</p>
+        </div>
       ) : (
         <div className="h-screen w-full flex flex-col">
           {/* Header */}

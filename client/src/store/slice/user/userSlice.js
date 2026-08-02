@@ -11,7 +11,7 @@ const initialState = {
   isAuthenticated: false,
   userProfile: null,
   otherUsers: null,
-  selectedUser: null,
+  selectedUser: JSON.parse(localStorage.getItem("selectedUser")),
   screenLoading: true,
   buttonLoading: false,
 };
@@ -21,6 +21,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setSelectedUser: (state, action) => {
+      localStorage.setItem("selectedUser", JSON.stringify(action.payload));
       state.selectedUser = action.payload;
     },
   },
@@ -61,8 +62,11 @@ export const userSlice = createSlice({
     builder.addCase(logoutUserThunk.fulfilled, (state, action) => {
       console.log(action.payload);
       ((state.userProfile = null),
-        (state.isAuthenticated = false),
+        ((state.selectedUser = null),
+        (state.otherUsers = null),
+        (state.isAuthenticated = false)),
         (state.buttonLoading = false));
+      localStorage.clear();
     });
     builder.addCase(logoutUserThunk.rejected, (state, action) => {
       state.buttonLoading = false;
@@ -77,7 +81,7 @@ export const userSlice = createSlice({
       ((state.isAuthenticated = true), (state.screenLoading = false));
       //add using chatgpt
       // state.userProfile = action.payload.responseData.user;
-      state.userProfile= action.payload.responseData;
+      state.userProfile = action.payload.responseData;
       console.log(action.payload);
     });
     builder.addCase(getUserProfileThunk.rejected, (state, action) => {
