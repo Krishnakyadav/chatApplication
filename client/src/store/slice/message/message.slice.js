@@ -10,7 +10,12 @@ const initialState = {
 export const messageSlice = createSlice({
   name: "message",
   initialState,
-  reducers: {},
+  reducers: {
+    setNewMessage: (state,action)=>{
+      const oldMessages = state.messages ?? []
+      state.messages = [...oldMessages,action.payload]
+    }
+  },
 
   //send message
   extraReducers: (builder) => {
@@ -40,6 +45,6 @@ export const messageSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = messageSlice.actions;
+export const {setNewMessage} = messageSlice.actions;
 
 export default messageSlice.reducer;

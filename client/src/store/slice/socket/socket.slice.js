@@ -11,6 +11,7 @@ export const socketSlice = createSlice({
   initialState,
   reducers: {
     initializaSocket: (state, action) => {
+      console.log(import.meta.env.VITE_DB_ORIGIN);
       const socket = io(import.meta.env.VITE_DB_ORIGIN, {
         query: {
           userId: action.payload,
@@ -18,6 +19,7 @@ export const socketSlice = createSlice({
       });
       state.socket = socket;
     },
+    
 
     setOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;

@@ -9,6 +9,7 @@ const SendMessage = () => {
   const [message, setMessage] = useState("");
 
   const handleSendMessage = () => {
+    if (!message.trim()) return;
     dispatch(sendMessageThunk({ receiverId: selectedUser?._id, message }));
      setMessage("")
   };
@@ -19,6 +20,7 @@ const SendMessage = () => {
         type="text"
         placeholder="Type here..."
         className="input input-bordered input-primary flex-1"
+        value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
 

@@ -8,6 +8,7 @@ import {
   initializaSocket,
   setOnlineUsers,
 } from "../../store/slice/socket/socket.slice";
+import { setNewMessage } from "../../store/slice/message/message.slice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,11 @@ const Home = () => {
     if (!socket) return;
     socket.on("onlineUsers", (onlineUsers) => {
       dispatch(setOnlineUsers(onlineUsers));
+    });
+
+     socket.on("newMessage", (newMessage) => {
+   console.log(newMessage)
+   dispatch(setNewMessage(newMessage))
     });
     return()=>{
       socket.close()
@@ -45,3 +51,5 @@ const Home = () => {
 };
 
 export default Home;
+
+

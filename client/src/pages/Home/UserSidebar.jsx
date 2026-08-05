@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import User from "./User";
 import { logoutUserThunk } from "../../store/slice/user/user.thunk";
 import { useDispatch, useSelector } from "react-redux";
 
 const UserSidebar = () => {
+  const [searchValue,setSearchValue] = useState("")
   const dispatch = useDispatch();
   const { otherUsers, userProfile } = useSelector((state) => state.userReducer);
 
@@ -22,7 +23,7 @@ const UserSidebar = () => {
       {/* Search bar */}
       <div className="p-3">
         <label className="input input-bordered flex items-center gap-2">
-          <input type="text" className="grow" placeholder="Search" />
+          <input onChange={(e)=>setSearchValue(e.target.value)} type="text" className="grow" placeholder="Search" />
           <IoSearch />
         </label>
       </div>
